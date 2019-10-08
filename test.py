@@ -20,4 +20,4 @@ while True:
         print(master.recv_match().to_dict())
     except:
         pass
-    time.sleep(0.1)
+    time.sleep(1)
