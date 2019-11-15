@@ -39,7 +39,7 @@ import matplotlib.pyplot as plt
 
 print('imports complete')
 
-vid_capture = cv2.VideoCapture(0)
+vid_capture = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 
 this = True
 while this:
@@ -78,5 +78,26 @@ while this:
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
+print('something')
 vid_capture.release()
 cv2.destroyAllWindows()
+print('random')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
