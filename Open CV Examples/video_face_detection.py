@@ -15,6 +15,8 @@ while True:
     _, img = cap.read()
     # Convert to grayscale
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    # Flip horizontally
+    # img = cv2.flip(img, 1)
     # Detect the faces
     faces = face_cascade.detectMultiScale(gray, 1.1, 4)
     # Get image size
