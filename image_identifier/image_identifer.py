@@ -10,7 +10,7 @@ from matplotlib.figure import Figure
 
 class MainFrame(wx.Frame):
     def __init__(self):
-        wx.Frame.__init__(self, parent=None, id=wx.ID_ANY, title='Christine can lick my balls', size=(600,400))
+        wx.Frame.__init__(self, parent=None, id=wx.ID_ANY, title='Christine can lick my balls', size=(500,500))
         
         # Dummy variables
         self.points = []
