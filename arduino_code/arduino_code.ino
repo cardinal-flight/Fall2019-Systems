@@ -30,6 +30,7 @@ void loop() {
     
       if (incomingByte == 'R') {
         pan.write(120);
+        Serial.print("Right");
       }
       
       if (incomingByte == 'L') {
@@ -41,12 +42,12 @@ void loop() {
       }
 
       if (incomingByte == 'U') {
-        if (pos < 180){ pos = pos + 1; }
+        if (pos < 180){ pos = pos + 2; }
         tilt.write(pos);
       }
 
       if (incomingByte == 'D') {
-        if (pos > 0){ pos = pos - 1; }
+        if (pos > 0){ pos = pos - 2; }
         tilt.write(pos);
       }
 

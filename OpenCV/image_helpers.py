@@ -1,7 +1,7 @@
 import pdb
 import serial
 
-ser = serial.Serial('/dev/ttyACM1', 9600, timeout = 1)
+ser = serial.Serial('/dev/ttyACM0', 9600, timeout = 1)
 
 def camera_move_direction(faces, dimensions):
     margin = 0.05 # amount the face is allowed to be off center e.g. 0.1 = 10%
