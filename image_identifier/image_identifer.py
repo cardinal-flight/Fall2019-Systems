@@ -2,7 +2,7 @@
 import wx
 import cv2
 import pdb
-import msvcrt
+import os
 
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
 from matplotlib.backends.backend_wxagg import NavigationToolbar2WxAgg
@@ -10,15 +10,20 @@ from matplotlib.figure import Figure
 
 class MainFrame(wx.Frame):
     def __init__(self):
-        wx.Frame.__init__(self, parent=None, id=wx.ID_ANY, title='Christine can lick my balls', size=(500,500))
+        wx.Frame.__init__(self, parent=None, id=wx.ID_ANY, title='Image Identifier', size=(500,500))
         
         # Dummy variables
         self.points = []
-        self.xin = None
+        self.xmin = None
         self.xmax = None
         self.ymin = None
         self.ymax = None
         self.dimensions = None
+        self.outfile_paths = []
+        self.outfile_xmin = []
+        self.outfile_ymin = []
+        self.outfile_xmax = []
+        self.outfile_ymax = []
         
         # Panels
         graph_panel = wx.Panel(self)
@@ -52,18 +57,29 @@ class MainFrame(wx.Frame):
         self.SetSizer(bs)
         
         # Call method to show image in plot
-        self.add_picture()
+        self.index = 0
+        self.paths = self.handle_filenames()
+        self.add_picture(self.paths[self.index])
         
         # Connect clicking event
         self.canvas.mpl_connect('button_press_event', self.pick_point)
         
 
-    def add_picture(self):
-        pic_path = 'cage.jpg'
+    def add_picture(self, pic_path):
+        self.axes.clear()
         my_pic = cv2.imread(pic_path, cv2.IMREAD_COLOR)
         self.dimensions = my_pic.shape
-
         self.axes.imshow(my_pic)
+        self.canvas.draw()
+    
+    def handle_filenames(self):
+        cur_dir = os.getcwd()
+        all_paths = os.listdir(cur_dir)
+        paths = []
+        for pathname in all_paths:
+            if pathname.endswith('.jpg'):
+                paths.append(pathname)
+        return paths
     
     def pick_point(self, event):
         if event.inaxes:
@@ -85,22 +101,48 @@ class MainFrame(wx.Frame):
         x_val = [self.points[0][0],self.points[1][0]]
         y_val = [self.points[0][1],self.points[1][1]]
         
-        self.xmin = min(x_val)
-        self.xmax = max(x_val)
-        self.ymin = min(y_val)
-        self.ymax = max(y_val)
+        self.xmin = int(round(min(x_val)))
+        self.xmax = int(round(max(x_val)))
+        self.ymin = int(round(min(y_val)))
+        self.ymax = int(round(max(y_val)))
         
     def on_ok_button(self, event):
         print('Okay')
+        self.outfile_paths.append(self.paths[self.index])
+        # Pass coordinates and data
+        self.outfile_xmin.append(self.xmin)
+        self.outfile_ymin.append(self.ymin)
+        self.outfile_xmax.append(self.xmax)
+        self.outfile_ymax.append(self.ymax)
+        
+        self.index += 1
+        if self.index < len(self.paths):        
+            # Clear variables and move to next picture
+            self.points = []
+            self.xmin = None
+            self.xmax = None
+            self.ymin = None
+            self.ymax = None
+            self.add_picture(self.paths[self.index])
+        else:
+            self.write_outfile()
+            print('info.dat has been created in the current working directory.')
+            
     
     def on_cancel_button(self, event):
         self.points = []
-        self.xin = None
+        self.xmin = None
         self.xmax = None
         self.ymin = None
         self.ymax = None
         del self.axes.lines[:]
         self.canvas.draw()
+        
+    def write_outfile(self):
+        outfile = open('info.dat', 'w')
+        for i in range(len(self.outfile_paths)):
+            outfile.write('{}  1  {} {} {} {}\n'.format(self.outfile_paths[i], self.outfile_xmin[i], self.outfile_ymin[i], self.outfile_xmax[i], self.outfile_ymax[i]))
+        
         
 if __name__ == '__main__':
     app = wx.App()
