@@ -28,7 +28,7 @@ while True:
     elif k%256 == 110:
         onlyfiles = next(os.walk("negatives"))[2]
         img_name = "negatives/neg_{}.jpg".format(len(onlyfiles) + 1)
-        f.write("neg_{}.jpg\n".format(len(onlyfiles) + 1))
+        f.write("negatives/neg_{}.jpg\n".format(len(onlyfiles) + 1))
         print("Negative taken")
         cv2.imwrite(img_name, frame)
         
