@@ -3,7 +3,7 @@ from pymavlink import mavutil
 import time
 
 # Create the connection
-master = mavutil.mavlink_connection('udpin:127.0.0.1:14550')
+master = mavutil.mavlink_connection('/dev/ttyAMA0', baud=921600)
 # Wait a heartbeat before sending commands
 master.wait_heartbeat()
 
@@ -31,16 +31,16 @@ def set_rc_channel_pwm(id, pwm=1500):
             *rc_channel_values)                  # RC channel list, in microseconds.
 
 # Set some roll
-set_rc_channel_pwm(2, 1600)
+set_rc_channel_pwm(6, 1600)
 
 time.sleep(5)
 
 # Set some yaw
-set_rc_channel_pwm(4, 1600)
+set_rc_channel_pwm(6, 1200)
 
 time.sleep(5)
 
 # The camera pwm value is the servo speed
 # and not the servo position
 # Set camera tilt to 45 degrees with full speed
-set_rc_channel_pwm(8, 1900)
+set_rc_channel_pwm(6, 500)
